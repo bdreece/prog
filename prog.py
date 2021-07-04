@@ -13,6 +13,7 @@ def generate(ctx, param, value):
         path = click.format_filename(value)
     with open(path, 'wt') as f:
         f.write(buffer)
+    click.edit(require_save=False, filename=path)
     ctx.exit()
 
 @click.command(context_settings=CONTEXT_SETTINGS, help='A command line utility for centralizing scripted shell commands via a configurable JSON file')

@@ -42,8 +42,8 @@
    -g, --generate PATH  Generate default JSON file
    -v, --verbose        Show verbose output
    -f, --file PATH      Path to JSON file
-   --version            Show the version and exit.
-   --help               Show this message and exit.
+   -V, --version        Show the version and exit.
+   -h, --help           Show this message and exit.
  ```
 
 #### JSON File

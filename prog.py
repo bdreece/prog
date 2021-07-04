@@ -14,7 +14,7 @@ def generate(ctx, param, value):
         f.write(buffer)
     ctx.exit()
 
-@click.command(help='Command line utility for customized project management')
+@click.command(help='A command line utility for centralized scripted shell commands via a configurable JSON file')
 @click.option('-g', '--generate', type=click.Path(), is_flag=False, expose_value=False, flag_value='./prog.json', is_eager=True, callback=generate, help='Generate default JSON file')
 @click.option('-v', '--verbose', is_flag=True, default=False, help='Show verbose output')
 @click.option('-f', '--file', required=False, type=click.Path(exists=True), help='Path to JSON file')
@@ -32,10 +32,10 @@ def cli(ctx, verbose, file, commands):
         with open(path, 'rt') as f:
             conf = load(f)
     for command in commands:
-        if verbose: click.echo('Resolving command: ' + command)
+        if verbose: click.echo(); click.echo('Resolving command: ' + command)
         cmd = conf.get(command)
         if cmd is not None:
-            if verbose: click.echo('Executing command: ' + cmd)
+            if verbose: click.echo('Executing command: ' + cmd); click.echo()
             os.system(cmd)
         else:
             click.echo('No command specified: ' + command)

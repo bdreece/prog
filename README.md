@@ -35,7 +35,7 @@
  ```
  Usage: prog [OPTIONS] [COMMANDS]...
 
-   A command line utility for centralized scripted shell commands via a
+   A command line utility for centralizing scripted shell commands via a
    configurable JSON file
 
  Options:

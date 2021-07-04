@@ -1,7 +1,8 @@
 from json import load
 import click, os, pkg_resources
 
-version_message = 'prog 0.1.0 20210703\n\nBSD 3-Clause License\nCopyright (c) 2021, Brian Reece\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the conditions listed in the license are met.\n'
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+VERSION_MESSAGE = 'prog 0.1.0 20210703\n\nBSD 3-Clause License\nCopyright (c) 2021, Brian Reece\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the conditions listed in the license are met.\n'
 
 def generate(ctx, param, value):
     if not value or ctx.resilient_parsing:
@@ -14,17 +15,19 @@ def generate(ctx, param, value):
         f.write(buffer)
     ctx.exit()
 
-@click.command(help='A command line utility for centralizing scripted shell commands via a configurable JSON file')
+@click.command(context_settings=CONTEXT_SETTINGS, help='A command line utility for centralizing scripted shell commands via a configurable JSON file')
 @click.option('-g', '--generate', type=click.Path(), is_flag=False, expose_value=False, flag_value='./prog.json', is_eager=True, callback=generate, help='Generate default JSON file')
 @click.option('-v', '--verbose', is_flag=True, default=False, help='Show verbose output')
 @click.option('-f', '--file', required=False, type=click.Path(exists=True), help='Path to JSON file')
-@click.version_option(version='0.1.0', message=version_message)
+@click.version_option('0.1.0', '-V', '--version', message=VERSION_MESSAGE)
 @click.argument('commands', type=str, nargs=-1)
 @click.pass_context
 def cli(ctx, verbose, file, commands):
+    if not commands:
+        ctx.exit()
     conf = {}
     path = './prog.json'
-    if verbose: click.echo(version_message)
+    if verbose: click.echo(VERSION_MESSAGE)
     if file:
         path = click.format_filename(file)
     if os.path.exists(path):

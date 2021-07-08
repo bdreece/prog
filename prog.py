@@ -4,6 +4,15 @@ import click, os, pkg_resources
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 VERSION_MESSAGE = 'prog 0.1.0 20210703\n\nBSD 3-Clause License\nCopyright (c) 2021, Brian Reece\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the conditions listed in the license are met.\n'
 
+def edit(ctx, param, value):
+    if not value or ctx.resilient_parsing:
+        return value
+    path = './prog.json'
+    if value:
+        path = click.format_filename(value)
+    click.edit(require_save=False, filename=path)
+    ctx.exit()
+
 def generate(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return value
@@ -18,6 +27,7 @@ def generate(ctx, param, value):
 
 @click.command(context_settings=CONTEXT_SETTINGS, help='A command line utility for centralizing scripted shell commands via a configurable JSON file')
 @click.option('-g', '--generate', type=click.Path(), is_flag=False, expose_value=False, flag_value='./prog.json', is_eager=True, callback=generate, help='Generate default JSON file')
+@click.option('-e', '--edit', type=click.Path(exists=True), is_flag=False, expose_value=False, flag_value='./prog.json', is_eager=True, callback=edit, help='Edit prog.json file')
 @click.option('-v', '--verbose', is_flag=True, default=False, help='Show verbose output')
 @click.option('-f', '--file', required=False, type=click.Path(exists=True), help='Path to JSON file')
 @click.version_option('0.1.0', '-V', '--version', message=VERSION_MESSAGE)

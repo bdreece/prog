@@ -26,8 +26,8 @@ def generate(ctx, param, value):
     ctx.exit()
 
 @click.command(context_settings=CONTEXT_SETTINGS, help='A command line utility for centralizing scripted shell commands via a configurable JSON file')
-@click.option('-g', '--generate', type=click.Path(), is_flag=False, expose_value=False, flag_value='./prog.json', is_eager=True, callback=generate, help='Generate default JSON file')
-@click.option('-e', '--edit', type=click.Path(exists=True), is_flag=False, expose_value=False, flag_value='./prog.json', is_eager=True, callback=edit, help='Edit JSON file')
+@click.option('-g', '--generate', type=click.Path(), is_flag=False, expose_value=False, flag_value='./prog.json', is_eager=True, callback=generate, help='Generate default JSON file and exit')
+@click.option('-e', '--edit', type=click.Path(exists=True), is_flag=False, expose_value=False, flag_value='./prog.json', is_eager=True, callback=edit, help='Edit JSON file and exit')
 @click.option('-v', '--verbose', is_flag=True, default=False, help='Show verbose output')
 @click.option('-f', '--file', required=False, type=click.Path(exists=True), help='Path to JSON file')
 @click.version_option('0.1.0', '-V', '--version', message=VERSION_MESSAGE)

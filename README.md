@@ -39,7 +39,8 @@
    configurable JSON file
 
  Options:
-   -g, --generate PATH  Generate default JSON file
+   -g, --generate PATH  Generate default JSON file and exit
+   -e, --edit PATH      Edit JSON file and exit
    -v, --verbose        Show verbose output
    -f, --file PATH      Path to JSON file
    -V, --version        Show the version and exit.

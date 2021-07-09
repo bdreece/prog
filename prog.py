@@ -2,7 +2,7 @@ from json import load
 import click, os, pkg_resources
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
-VERSION_MESSAGE = 'prog 0.1.0 20210703\n\nBSD 3-Clause License\nCopyright (c) 2021, Brian Reece\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the conditions listed in the license are met.\n'
+VERSION_MESSAGE = 'prog 0.1.1 20210708\n\nBSD 3-Clause License\nCopyright (c) 2021, Brian Reece\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the conditions listed in the license are met.\n'
 
 def edit(ctx, param, value):
     if not value or ctx.resilient_parsing:

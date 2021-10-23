@@ -14,8 +14,6 @@ def edit(ctx, param, value):
     ctx.exit()
 
 def generate(ctx, param, value):
-    if not value or ctx.resilient_parsing:
-        return value
     path = './prog.json'
     buffer = pkg_resources.resource_string(__name__, 'prog.json').decode('utf-8')
     if value:

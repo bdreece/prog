@@ -120,7 +120,7 @@ push:
  If nested subcommands are present, the `prog` tool expects exactly one command per layer of nesting. Try enabling verbose output if issues arise. With respect to the above example, a valid command sequence would be written as such:
 
 ```
-prog config debug build puhs
+prog config debug build push
 ```
 
 ## Future Plans

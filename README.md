@@ -1,5 +1,7 @@
 # prog
 
+[![PyPi version](https://pypip.in/v/prog-0.1.2/badge.png)](https://crate.io/packages/prog-0.1.2/)
+
  A tool for centralizing scripted shell commands via a configurable JSON or YAML file.
 
 ## Table of Contents

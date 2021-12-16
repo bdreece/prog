@@ -26,7 +26,10 @@
 
  prog is packaged via the setup script, and can be manually installed using the following
  command:
- `cd prog; pip install .`
+
+```bash
+cd prog; pip install .
+```
 
  Congratulations! You should now have prog installed on your system!
 
@@ -85,7 +88,7 @@
 
 The `prog` tool supports nested subcommands and lists of shell commands. These can be written in the form of nested objects and nested lists, respectively. Examples in JSON and YAML are as follows:
 
-```
+```json
 {
     "config": {
         "debug": "cmake -DCMAKE_BUILD_TYPE=Debug -B build -G Ninja .",
@@ -101,7 +104,7 @@ The `prog` tool supports nested subcommands and lists of shell commands. These c
 }
 ```
 
-```
+```yaml
 config:
     debug: cmake -DCMAKE_BUILD_TYPE=Debug -B build -G Ninja .
     release: cmake -DCMAKE_BUILD_TYPE=Release -B build -G Ninja .
@@ -123,7 +126,7 @@ push:
 
  If nested subcommands are present, the `prog` tool expects exactly one command per layer of nesting. Try enabling verbose output if issues arise. With respect to the above example, a valid command sequence would be written as such:
 
-```
+```bash
 prog config debug build push
 ```
 

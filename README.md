@@ -44,7 +44,7 @@
    -g, --generate   Create a config file
    -e, --edit       Edit config file
    -v, --verbose    Show verbose output
-   -f, --file PATH  Path to prog file
+   -f, --file PATH  Path to config file
    -V, --version    Show the version and exit.
    -h, --help       Show this message and exit.
  ```

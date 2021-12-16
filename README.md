@@ -10,6 +10,10 @@
 
 ## Downloading and Installing
 
+#### PyPI
+
+ prog is available on PyPI! You can install it via `pip install prog-0.1.2`
+
 #### Downloading
 
  prog is currently available as a GitHub repository, and can be cloned using the
@@ -18,7 +22,7 @@
 
 #### Installing
 
- prog is packaged via the setup script, and can be installed using the following
+ prog is packaged via the setup script, and can be manually installed using the following
  command:
  `cd prog; pip install .`
 

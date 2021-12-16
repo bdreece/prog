@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 setup(
-    name='prog',
+    name='prog-0.1.2',
     version='0.1.2',
     author='Brian Reece',
     author_email='bdreece@mtu.edu',

@@ -1,5 +1,0 @@
-{
-  "build": "make all",
-  "run": "./main",
-  "debug": "gdb ./main"
-}

@@ -1,0 +1,6 @@
+install: pip install -e .
+push:
+  - git add .
+  - git commit
+  - git push
+  - git status

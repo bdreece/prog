@@ -1,6 +1,6 @@
 # prog
 
- A tool for centralizing scripted shell commands via a configurable JSON file.
+ A tool for centralizing scripted shell commands via a configurable JSON or YAML file.
 
 ## Table of Contents
 

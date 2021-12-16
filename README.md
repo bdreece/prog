@@ -1,6 +1,6 @@
 # prog
 
-[![](https://img.shields.io/badge/{PyPI}-{prog-0.1.2}-{0073b7}.svg)](https://pypi.org/project/prog-0.1.2/)
+[![](https://img.shields.io/pypi/wheel/prog-0.1.2)](https://pypi.org/project/prog-0.1.2/)
 
  A tool for centralizing scripted shell commands via a configurable JSON or YAML file.
 

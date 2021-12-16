@@ -36,23 +36,22 @@
  Usage: prog [OPTIONS] [COMMANDS]...
 
    A command line utility for centralizing scripted shell commands via a
-   configurable JSON file
+   configurable JSON or YAML file
 
  Options:
-   -g, --generate PATH  Generate default JSON file and exit
-   -e, --edit PATH      Edit JSON file and exit
-   -v, --verbose        Show verbose output
-   -f, --file PATH      Path to JSON file
-   -V, --version        Show the version and exit.
-   -h, --help           Show this message and exit.
+   -j, --json       Use JSON config file
+   -y, --yml        Use YAML config file
+   -g, --generate   Create a config file
+   -e, --edit       Edit config file
+   -v, --verbose    Show verbose output
+   -f, --file PATH  Path to prog file
+   -V, --version    Show the version and exit.
+   -h, --help       Show this message and exit.
  ```
 
-#### JSON File
+#### JSON Config File
 
- A default JSON file can be generated using the `prog -g` command, optionally
- specifying an output file (default: `./prog.json`). This file is based on a
- C-style project, with commands listed for building, running, and debugging a
- project, and is configured as follows:
+ A default JSON file can be generated using the `prog -jg` command, optionally specifying an output file with `prog -jgf <PATH>` (default: `./prog.json`). This file is based on a C-style project, with commands listed for building, running, and debugging a project, and is configured as follows:
  ```
  {
    "build": "make all",
@@ -60,8 +59,49 @@
    "debug": "gdb ./main"
  }
  ```
- The command hooks are listed in the keys of the JSON file, and their corresponding
- shell commands are the respective values of the JSON file.
+ The aliased command hooks are listed in the keys of the JSON file, and their corresponding shell commands are the respective values of the JSON file.
+
+#### YAML Config File
+
+ A default YAML file can be generated using the `prog -yg` command, optionally specifying an output file with `prog -ygf <PATH>` (default: `./prog.yml`). This file is based on a C-style project, with commands listed for building, running, and debugging a project, and is configured as follows:
+```
+ build: make all
+ run: ./main
+ debug: gdb ./main
+```
+ The aliased command hooks are listed in the keys of the YAML file, and their corresponding shell commands are the respective values of the YAML file.
+
+#### Config File Structure
+
+The `prog` tool supports nested subcommands and lists of shell commands. These can be written in the form of nested objects and nested lists, respectively. Examples in JSON and YAML are as follows:
+
+```
+{
+    "config": {
+        "debug": "cmake -DCMAKE_BUILD_TYPE=Debug -B build -G Ninja .",
+        "release": "cmake -DCMAKE_BUILD_TYPE=Debug -B build -G Ninja ."
+    },
+    "build": "cd build; ninja",
+    "push": [
+        "git add .",
+        "git commit",
+        "git push"
+        "git status"
+    ]
+}
+```
+
+```
+config:
+    debug: cmake -DCMAKE_BUILD_TYPE=Debug -B build -G Ninja .
+    release: cmake -DCMAKE_BUILD_TYPE=Release -B build -G Ninja .
+build: cd build; ninja
+push:
+    - git add .
+    - git commit
+    - git push
+    - git status
+```
 
 #### Invocation
 
@@ -71,9 +111,8 @@
 
  Multiple commands may be specified, and will execute in the order they are specified.
 
+ If nested subcommands are present, the `prog` tool expects exactly one command per layer of nesting. Try enabling verbose output if issues arise.
+
 ## Future Plans
 
- As of right now, the prog command is about as simple as possible, while still
- operating as intended. I pictured this to be a higher-level solution than say
- a Makefile or other build system. One can orchestrate compilation and execution
- of project code through one centralized command.
+ With the addition of advanced object structures to `prog`'s parser, I can see a lot more use cases for this style of program. I plan to update this project incrementally as I get ideas for more intuitive behavior.

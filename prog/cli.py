@@ -15,10 +15,10 @@ VERSION_MESSAGE = 'prog 0.1.1 20210708\n\nBSD 3-Clause License\nCopyright (c) 20
 path = None
 
 @click.command(context_settings=CONTEXT_SETTINGS, help='A command line utility for centralizing scripted shell commands via a configurable JSON or YAML file')
-@click.option('-j', '--json', is_flag=True, default=False, is_eager=True, callback=fileType, help="Use JSON")
+@click.option('-j', '--json', is_flag=True, default=False, is_eager=True, callback=fileType, help="Use JSON config file")
 @click.option('-y', '--yml', is_flag=True, default=False, is_eager=True, callback=fileType, help="Use YAML config file")
-@click.option('-g', '--generate', is_flag=True, expose_value=False, callback=genFile, help='Create a config file and exit')
-@click.option('-e', '--edit', is_flag=True, expose_value=False, callback=editFile, help='Edit config file and exit')
+@click.option('-g', '--generate', is_flag=True, expose_value=False, callback=genFile, help='Create a config file')
+@click.option('-e', '--edit', is_flag=True, expose_value=False, callback=editFile, help='Edit config file')
 @click.option('-v', '--verbose', is_flag=True, default=False, help='Show verbose output')
 @click.option('-f', '--file', type=click.Path(exists=True), is_eager=True, expose_value=False, callback=selectFile, help='Path to prog file')
 @click.version_option('0.1.0', '-V', '--version', message=VERSION_MESSAGE)

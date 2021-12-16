@@ -13,20 +13,24 @@ def parse(ctx, verbose, commands, conf):
         ctx.exit()
 
     def _parser(ctx, verbose, commands, index, conf):
+        # Invalid command
         if commands[index.val] not in conf.keys():
             click.echo('[ERROR] ' + commands[index.val] + ' command not found in config file!')
             ctx.exit()
+        # Statement
         if isinstance(conf[commands[index.val]], str):
             if verbose: click.echo('[STMT] ' + str(conf[commands[index.val]]))
             if subprocess.run(conf[commands[index.val]], shell=True).returncode != 0:
                 _parser_fail(ctx, conf[commands[index.val]], verbose)
             index.val += 1
+        # List
         elif isinstance(conf[commands[index.val]], list):
             if verbose: click.echo('[LIST] ' + str(conf[commands[index.val]]))
             for command in conf[commands[index.val]]:
                 if subprocess.run(command, shell=True).returncode != 0:
                     _parser_fail(ctx, command, verbose)
             index.val += 1
+        # Dict
         elif isinstance(conf[commands[index.val]], dict):
             if verbose: click.echo('[DICT]' + str(conf[commands[index.val]]))
             index.val += 1

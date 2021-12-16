@@ -10,7 +10,7 @@ from prog.commands import selectFile, editFile, genFile, fileType
 from prog.parse import parse
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
-VERSION_MESSAGE = 'prog 0.1.1 20210708\n\nBSD 3-Clause License\nCopyright (c) 2021, Brian Reece\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the conditions listed in the license are met.\n'
+VERSION_MESSAGE = 'prog 0.1.3 20211215\n\nBSD 3-Clause License\nCopyright (c) 2021, Brian Reece\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the conditions listed in the license are met.\n'
 
 path = None
 

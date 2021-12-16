@@ -117,7 +117,11 @@ push:
 
  Multiple commands may be specified, and will execute in the order they are specified.
 
- If nested subcommands are present, the `prog` tool expects exactly one command per layer of nesting. Try enabling verbose output if issues arise.
+ If nested subcommands are present, the `prog` tool expects exactly one command per layer of nesting. Try enabling verbose output if issues arise. With respect to the above example, a valid command sequence would be written as such:
+
+```
+prog config debug build puhs
+```
 
 ## Future Plans
 

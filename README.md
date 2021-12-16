@@ -58,23 +58,27 @@
 #### JSON Config File
 
  A default JSON file can be generated using the `prog -jg` command, optionally specifying an output file with `prog -jgf <PATH>` (default: `./prog.json`). This file is based on a C-style project, with commands listed for building, running, and debugging a project, and is configured as follows:
- ```
+
+ ```json
  {
    "build": "make all",
    "run": "./main",
    "debug": "gdb ./main"
  }
  ```
+
  The aliased command hooks are listed in the keys of the JSON file, and their corresponding shell commands are the respective values of the JSON file.
 
 #### YAML Config File
 
  A default YAML file can be generated using the `prog -yg` command, optionally specifying an output file with `prog -ygf <PATH>` (default: `./prog.yml`). This file is based on a C-style project, with commands listed for building, running, and debugging a project, and is configured as follows:
-```
+
+```yaml
  build: make all
  run: ./main
  debug: gdb ./main
 ```
+
  The aliased command hooks are listed in the keys of the YAML file, and their corresponding shell commands are the respective values of the YAML file.
 
 #### Config File Structure

@@ -93,7 +93,7 @@ The `prog` tool supports nested subcommands and lists of shell commands. These c
 {
     "config": {
         "debug": "cmake -DCMAKE_BUILD_TYPE=Debug -B build -G Ninja .",
-        "release": "cmake -DCMAKE_BUILD_TYPE=Debug -B build -G Ninja ."
+        "release": "cmake -DCMAKE_BUILD_TYPE=Release -B build -G Ninja ."
     },
     "build": "cd build; ninja",
     "push": [

@@ -6,21 +6,26 @@
 import click, subprocess
 from prog.util import Index
 
+
 # TODO: Implement support for nested objects and lists
 def parse(ctx, verbose, commands, conf):
     def _parser_fail(ctx, cmd, verbose):
-        if verbose: click.echo('[ERROR] ' + cmd + ' command failed, halting execution'); click.echo()
+        if verbose:
+            click.echo('[ERROR] ' + cmd + ' command failed, halting execution')
+            click.echo()
         ctx.exit()
 
     def _parser(ctx, verbose, commands, index, conf):
         # Invalid command
         if commands[index.val] not in conf.keys():
-            click.echo('[ERROR] ' + commands[index.val] + ' command not found in config file!')
+            click.echo('[ERROR] ' + commands[index.val] +
+                       ' command not found in config file!')
             ctx.exit()
         # Statement
         if isinstance(conf[commands[index.val]], str):
             if verbose: click.echo('[STMT] ' + str(conf[commands[index.val]]))
-            if subprocess.run(conf[commands[index.val]], shell=True).returncode != 0:
+            if subprocess.run(conf[commands[index.val]],
+                              shell=True).returncode != 0:
                 _parser_fail(ctx, conf[commands[index.val]], verbose)
             index.val += 1
         # List
@@ -34,7 +39,8 @@ def parse(ctx, verbose, commands, conf):
         elif isinstance(conf[commands[index.val]], dict):
             if verbose: click.echo('[DICT]' + str(conf[commands[index.val]]))
             index.val += 1
-            _parser(ctx, verbose, commands, index, conf[commands[index.val - 1]])
+            _parser(ctx, verbose, commands, index,
+                    conf[commands[index.val - 1]])
 
     index = Index(0)
     while index.val < len(commands):

@@ -1,5 +1,6 @@
 import click, pkg_resources, os
 
+
 def fileType(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return value
@@ -11,6 +12,7 @@ def fileType(ctx, param, value):
         ctx.obj['filetype'] = str(param)[-4:-1]
     else:
         ctx.obj['filetype'] = str(param)[-5:-1]
+
 
 def selectFile(ctx, param, value):
     if not value or ctx.resilient_parsing:
@@ -28,6 +30,7 @@ def selectFile(ctx, param, value):
         click.echo('[ERROR] Unsupported file type')
         ctx.exit()
 
+
 def editFile(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return value
@@ -44,8 +47,8 @@ def editFile(ctx, param, value):
             click.echo('[ERROR] config file not found')
             ctx.exit()
 
-    
     click.edit(require_save=False, filename=ctx.obj['path'])
+
 
 def genFile(ctx, param, value):
     if not value or ctx.resilient_parsing:
@@ -62,8 +65,8 @@ def genFile(ctx, param, value):
             ctx.obj['filetype'] = ctx.obj['path'][-3:]
         else:
             ctx.obj['filetype'] = ctx.obj['path'][-4:]
-    
-    buffer = pkg_resources.resource_string(__name__, 'assets/prog.' + ctx.obj['filetype']).decode('utf-8')
+
+    buffer = pkg_resources.resource_string(
+        __name__, 'assets/prog.' + ctx.obj['filetype']).decode('utf-8')
     with open(ctx.obj['path'], 'wt') as f:
         f.write(buffer)
-

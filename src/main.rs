@@ -79,11 +79,11 @@ enum Template {
 fn main() {
     let args = Args::parse();
 
-    if let Some(format) = args.format {
+    if let Some(format) = &args.format {
         println!("{:?}", format);
     }
 
-    if let Some(template) = args.template {
+    if let Some(template) = &args.template {
         println!("{:?}", template);
     }
 

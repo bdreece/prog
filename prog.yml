@@ -1,3 +1,0 @@
-build: cargo build
-run: ./target/debug/prog -h
-debug: gdb --args ./target/debug/prog -h

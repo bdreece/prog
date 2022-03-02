@@ -31,7 +31,7 @@ struct Args {
     )]
     format: Option<Format>,
 
-	#[clap(
+    #[clap(
         short,
         long,
         arg_enum,
@@ -39,12 +39,18 @@ struct Args {
         value_name = "TEMPLATE",
         help = "Config file template"
     )]
-	template: Option<Template>,
+    template: Option<Template>,
 
     #[clap(short, long, parse(from_occurrences), help = "Sets verbosity level")]
     verbose: usize,
 
-	#[clap(short, long, requires = "format_group", requires = "template_group", help = "Generate config file")]
+    #[clap(
+        short,
+        long,
+        requires = "format_group",
+        requires = "template_group",
+        help = "Generate config file"
+    )]
     generate: bool,
 
     targets: Vec<String>,
@@ -62,11 +68,11 @@ enum Format {
 
 #[derive(ArgEnum, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum Template {
-	Cmake,
+    Cmake,
     Cargo,
     Go,
     Node,
-	Make,
+    Make,
     Python,
 }
 
@@ -74,11 +80,11 @@ fn main() {
     let args = Args::parse();
 
     if let Some(format) = args.format {
-		println!("{:?}", format);
+        println!("{:?}", format);
     }
 
     if let Some(template) = args.template {
-    	println!("{:?}", template);
+        println!("{:?}", template);
     }
 
     println!("{}", args.verbose);

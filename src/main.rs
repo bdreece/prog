@@ -1,8 +1,21 @@
+use std::ffi::OsStr;
+use std::io::Result;
 use std::path::PathBuf;
 use std::string::String;
-use std::vec::Vec;
 
-use clap::{ArgEnum, Parser};
+use clap::Parser;
+
+mod convert;
+mod exec;
+mod generate;
+mod lex;
+mod parse;
+
+use crate::convert::convert_config;
+//use crate::exec::exec;
+use crate::generate::{generate_config, Format, Template};
+//use crate::lex::lex_targets;
+use crate::parse::parse_config;
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -53,39 +66,48 @@ struct Args {
     )]
     generate: bool,
 
-    targets: Vec<String>,
+    #[clap(
+        short,
+        long,
+        requires = "format_group",
+        help = "Convert between markup formats"
+    )]
+	convert: bool,
+
+    #[clap(help = "Formatted string specifying command targets")]
+    targets: String,
 }
 
-#[derive(ArgEnum, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
-enum Format {
-    Json,
-    Ron,
-    Toml,
-    Url,
-    Xml,
-    Yaml,
-}
-
-#[derive(ArgEnum, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
-enum Template {
-    Cmake,
-    Cargo,
-    Go,
-    Node,
-    Make,
-    Python,
-}
-
-fn main() {
+fn main() -> Result<()> {
     let args = Args::parse();
 
-    if let Some(format) = &args.format {
-        println!("{:?}", format);
+    let path = args.path.unwrap_or(PathBuf::from(OsStr::new(".")));
+	let format = args.format.unwrap_or(Format::Yaml);
+    let template = args.template.unwrap_or(Template::Bare);
+
+    if args.generate {
+        generate_config(
+            &path,
+            &format,
+            template
+        )?;
     }
 
-    if let Some(template) = &args.template {
-        println!("{:?}", template);
+    if args.convert {
+    	convert_config(&path, &format)?;
     }
 
-    println!("{}", args.verbose);
+    let config = parse_config(&path)?;
+
+	println!("{:?}", config);
+
+    /*
+      if let Some(targets) = lex_targets(args.targets, config) {
+        for command in commands {
+     		exec(command)?;
+        }
+      }
+    */
+
+    Ok(())
 }

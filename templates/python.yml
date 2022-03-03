@@ -1,0 +1,6 @@
+---
+run(1): python $1.py
+push:
+  - git add .
+  - git commit
+  - git push

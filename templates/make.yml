@@ -1,0 +1,7 @@
+---
+build: make all
+run(1): ./$1
+push:
+  - git add .
+  - git commit
+  - git push

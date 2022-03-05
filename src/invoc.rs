@@ -1,3 +1,6 @@
+use std::fs::File;
+use std::io::Read;
+use std::path::PathBuf;
 use std::vec::Vec;
 
 use lazy_static::lazy_static;
@@ -21,6 +24,10 @@ pub struct Invoc {
 }
 
 pub type Invocs = Vec<Invoc>;
+
+lazy_static! {
+	static ref DELIM_RE: Regex = Regex::new(r"\s?[;\n]+\s?").unwrap();
+}
 
 impl TryParseFrom<&str> for Invoc {
     type Error = regex::Error;
@@ -110,20 +117,38 @@ impl TryParseFrom<&str> for Invoc {
     }
 }
 
-impl TryParseFrom<&str> for Invocs {
+impl TryParseFrom<&String> for Invocs {
     type Error = regex::Error;
-	fn try_parse_from(invocs: &str) -> Result<Invocs, Self::Error> {
-    	lazy_static! {
-        	static ref DELIM_RE: Regex = Regex::new(r";\s?").unwrap();
-    	}
-
+	fn try_parse_from(invocs: &String) -> Result<Invocs, Self::Error> {
 		let mut invoc_list: Invocs = vec![];
 
-    	for stmt in DELIM_RE.split(invocs) {
-        	let invoc = Invoc::try_parse_from(stmt).unwrap();
-    		invoc_list.push(invoc);
+    	for stmt in DELIM_RE.split(invocs.as_str()) {
+            if stmt != "" {
+        		let invoc = Invoc::try_parse_from(stmt)?;
+    			invoc_list.push(invoc);
+            }
         }
 
     	Ok(invoc_list)
 	}
+}
+
+impl TryParseFrom<&PathBuf> for Invocs {
+	type Error = regex::Error;
+    fn try_parse_from(invocs: &PathBuf) -> Result<Invocs, Self::Error> {
+    	let mut invoc_file = File::open(invocs).unwrap();
+        let mut invoc_str = String::new();
+        let mut invoc_list: Invocs = vec![];
+        invoc_file.read_to_string(&mut invoc_str).unwrap();
+
+        for stmt in DELIM_RE.split(invoc_str.as_str()).skip(1) {
+            println!("{}", stmt);
+        	if stmt != "" {
+            	let invoc = Invoc::try_parse_from(stmt)?;
+                invoc_list.push(invoc);
+            }
+        }
+
+        Ok(invoc_list)
+    }
 }

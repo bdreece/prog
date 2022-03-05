@@ -1,0 +1,4 @@
+#!./target/debug/prog -s
+config.debug
+build
+run

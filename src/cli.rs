@@ -1,7 +1,7 @@
 use std::option::Option;
 use std::path::PathBuf;
 
-use clap::{ArgEnum, Parser};
+use clap::{ArgEnum, ArgGroup, Parser};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -10,6 +10,11 @@ use clap::{ArgEnum, Parser};
     about = "A tool for centralizing scripted commands via a configurable markup file",
     long_about = None
 )]
+#[clap(group(
+		ArgGroup::new("input_group")
+        	.required(false)
+            .args(&["script", "input"]),
+        ))]
 pub struct Args {
     #[clap(
         short,
@@ -60,8 +65,18 @@ pub struct Args {
     )]
     pub convert: bool,
 
-    #[clap(help = "Formatted string specifying alias targets")]
-    pub script: Option<String>,
+	#[clap(
+        short,
+        long,
+        help = "Input alias invocation script"
+    )]
+    pub script: Option<PathBuf>,
+
+    #[clap(
+        last = true,
+        help = "Formatted string specifying alias targets"
+    )]
+    pub input: Option<String>,
 }
 
 #[derive(ArgEnum, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]

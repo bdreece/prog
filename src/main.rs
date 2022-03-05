@@ -38,8 +38,10 @@ fn main() -> Result<()> {
     let aliases = Aliases::try_parse_from(config).unwrap();
     let mut invocs: Invocs = vec![];
     
-    if let Some(invoc_str) = &args.script {
-        invocs = Invocs::try_parse_from(&invoc_str).unwrap();
+    if let Some(invoc_str) = &args.input {
+        invocs = Invocs::try_parse_from(&String::from(invoc_str)).unwrap();
+    } else if let Some(invoc_path) = &args.script {
+    	invocs = Invocs::try_parse_from(invoc_path).unwrap();	
     }
 
     println!("Aliases: {:#?}", aliases);

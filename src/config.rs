@@ -2,11 +2,24 @@ use std::collections::HashMap;
 use std::io::ErrorKind;
 use std::path::PathBuf;
 
+use lazy_static::lazy_static;
 use serde_any;
 
 use crate::prelude::TryParseFrom;
 use crate::cli::{Format, Template};
 use crate::alias::AliasValue;
+
+static TEMPLATE_CMAKE_STR: &str = "{\"build\":\"cmake --build ./build\",\"test\":\"ctest -V --test-dir=./build/tests\",\"configure\":{\"release\":[\"mkdir -p build\",\"cmake -DCMAKE_BUILD_TYPE=Release -B ./build .\"],\"debug\":[\"mkdir -p build\",\"cmake -DCMAKE_BUILD_TYPE=Debug -B ./build .\"]},\"push\":[\"git add .\",\"git commit\",\"git push\"]}";
+
+static TEMPLATE_CARGO_STR: &str = "{\"build\":{\"debug\":\"cargo build\",\"release\":\"cargo build --release\"},\"run\":\"cargo run\",\"test\":\"cargo test\",\"push\":[\"git add .\",\"git commit\",\"git push\"]}";
+
+static TEMPLATE_GO_STR: &str = "{\"run\":\"go run .\",\"test\":\"go test\",\"build\":\"go build\",\"push\":[\"git add .\",\"git commit\",\"git push\"]}";
+
+static TEMPLATE_MAKE_STR: &str = "{\"build\":\"make all\",\"push\":[\"git add .\",\"git commit\",\"git push\"],\"run(1)\":\"./$1\"}";
+
+static TEMPLATE_NODE_STR: &str = "{\"run\":\"npm start\",\"build\":\"npm run build\",\"push\":[\"git add .\",\"git commit\",\"git push\"]}";
+
+static TEMPLATE_PYTHON_STR: &str = "{\"push\":[\"git add .\",\"git commit\",\"git push\"],\"run(1)\":\"python $1.py\"}";
 
 pub struct Config {
     pub path: Box<PathBuf>,
@@ -66,17 +79,32 @@ impl Config {
     	Ok(())
 	}
 
-
 	pub fn new(path: &PathBuf, format: &Format, template: Template) -> Result<Config, serde_any::Error> {
-    	let entry = new_filepath(&path, &format);
+    	lazy_static! {
+        	static ref TEMPLATE_BARE: HashMap<String, AliasValue> = HashMap::new();
+            static ref TEMPLATE_CMAKE: HashMap<String, AliasValue> = 
+                serde_any::from_str(TEMPLATE_CMAKE_STR, serde_any::Format::Json).unwrap();
+            static ref TEMPLATE_CARGO: HashMap<String, AliasValue> = 
+                serde_any::from_str(TEMPLATE_CARGO_STR, serde_any::Format::Json).unwrap();
+            static ref TEMPLATE_GO: HashMap<String, AliasValue> = 
+                serde_any::from_str(TEMPLATE_GO_STR, serde_any::Format::Json).unwrap();
+            static ref TEMPLATE_MAKE: HashMap<String, AliasValue> = 
+                serde_any::from_str(TEMPLATE_MAKE_STR, serde_any::Format::Json).unwrap();
+            static ref TEMPLATE_NODE: HashMap<String, AliasValue> =
+                serde_any::from_str(TEMPLATE_NODE_STR, serde_any::Format::Json).unwrap();
+            static ref TEMPLATE_PYTHON: HashMap<String, AliasValue> =
+                serde_any::from_str(TEMPLATE_PYTHON_STR, serde_any::Format::Json).unwrap();
+        }
+
+        let entry = new_filepath(&path, &format);
         let data: HashMap<String, AliasValue> = match template {
-        	Template::Bare => HashMap::new(),
-        	Template::Cmake => serde_any::from_file("templates/cmake.yml")?,
-        	Template::Cargo => serde_any::from_file("templates/cargo.yml")?,
-        	Template::Go => serde_any::from_file("templates/go.yml")?,
-        	Template::Node => serde_any::from_file("templates/node.yml")?,
-        	Template::Make => serde_any::from_file("templates/make.yml")?,
-        	Template::Python => serde_any::from_file("templates/python.yml")?,
+        	Template::Bare => TEMPLATE_BARE.clone(),
+        	Template::Cmake => TEMPLATE_CMAKE.clone(),
+        	Template::Cargo => TEMPLATE_CARGO.clone(),
+        	Template::Go => TEMPLATE_GO.clone(),
+        	Template::Node => TEMPLATE_NODE.clone(),
+        	Template::Make => TEMPLATE_MAKE.clone(),
+        	Template::Python => TEMPLATE_PYTHON.clone(),
     	};
 
     	Ok(Config {

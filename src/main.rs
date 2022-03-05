@@ -3,17 +3,17 @@ use std::path::PathBuf;
 
 use clap::Parser;
 
+mod alias;
 mod cli;
-mod convert;
-mod exec;
-mod generate;
-mod parse;
-mod traverse;
+mod config;
+mod invoc;
+mod prelude;
 
-use crate::cli::Args;
-use crate::convert::convert_config;
-use crate::generate::{generate_config, Format, Template};
-use crate::parse::{parse_config, parse_targets, AliasType};
+use crate::cli::{Args, Format, Template};
+use crate::config::Config;
+use crate::alias::Aliases;
+use crate::invoc::Invocs;
+use crate::prelude::TryParseFrom;
 
 fn main() -> Result<()> {
     let args = Args::parse();
@@ -22,23 +22,29 @@ fn main() -> Result<()> {
     let format = args.format.unwrap_or(Format::Yaml);
     let template = args.template.unwrap_or(Template::Bare);
 
-    if args.generate {
-        generate_config(&path, &format, template)?;
-    }
+    let config = match args.generate {
+		true => {
+            let c = Config::new(&path, &format, template).unwrap();
+            c.dump(&format).unwrap();
+            c
+        },
+        false => Config::try_parse_from(&path).unwrap(),
+    };
 
     if args.convert {
-        convert_config(&path, &format)?;
+    	config.dump(&format).unwrap();
     }
 
-    let mut targets: Vec<(String, AliasType)> = vec![];
-    let config = parse_config(&path)?;
-    if let Some(target_string) = &args.targets {
-        targets = parse_targets(&target_string)?;
+    let aliases = Aliases::try_parse_from(config).unwrap();
+    let mut invocs: Invocs = vec![];
+    
+    if let Some(invoc_str) = &args.script {
+        invocs = Invocs::try_parse_from(&invoc_str).unwrap();
     }
 
-    println!("Config: {:#?}", config);
+    println!("Aliases: {:#?}", aliases);
     println!("");
-    println!("Targets: {:#?}", targets);
+    println!("Invocations: {:#?}", invocs);
 
     Ok(())
 }

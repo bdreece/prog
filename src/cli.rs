@@ -1,9 +1,7 @@
 use std::option::Option;
 use std::path::PathBuf;
 
-use clap::Parser;
-
-use crate::{Format, Template};
+use clap::{ArgEnum, Parser};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -62,6 +60,25 @@ pub struct Args {
     )]
     pub convert: bool,
 
-    #[clap(help = "Formatted string specifying command targets")]
-    pub targets: Option<String>,
+    #[clap(help = "Formatted string specifying alias targets")]
+    pub script: Option<String>,
+}
+
+#[derive(ArgEnum, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub enum Format {
+    Json,
+    Ron,
+    Toml,
+    Yaml,
+}
+
+#[derive(ArgEnum, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub enum Template {
+    Bare,
+    Cmake,
+    Cargo,
+    Go,
+    Node,
+    Make,
+    Python,
 }

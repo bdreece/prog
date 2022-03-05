@@ -1,4 +1,4 @@
-# prog
+# prog (Legacy Python branch)
 
 [![](https://img.shields.io/pypi/v/prog-0.1.2)](https://pypi.org/project/prog-0.1.2/)
 [![](https://img.shields.io/github/v/release/bdreece/prog?include_prereleases)](https://github.com/bdreece/prog/releases)

@@ -8,7 +8,7 @@ use regex::Regex;
 
 use crate::prelude::TryParseFrom;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum InvocType {
     Declarative,
     Imperative(Vec<String>),
@@ -17,10 +17,10 @@ pub enum InvocType {
     Selective(Box<Invoc>),
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Invoc {
-	alias_key: String,
-    invoc_type: InvocType,
+	pub alias_key: String,
+    pub invoc_type: InvocType,
 }
 
 pub type Invocs = Vec<Invoc>;
@@ -28,6 +28,7 @@ pub type Invocs = Vec<Invoc>;
 lazy_static! {
 	static ref DELIM_RE: Regex = Regex::new(r"\s?[;\n]+\s?").unwrap();
 }
+
 
 impl TryParseFrom<&str> for Invoc {
     type Error = regex::Error;

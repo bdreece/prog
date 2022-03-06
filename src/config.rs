@@ -3,11 +3,11 @@ use std::io::ErrorKind;
 use std::path::PathBuf;
 
 use lazy_static::lazy_static;
+use serde::{Deserialize, Serialize};
 use serde_any;
 
 use crate::prelude::TryParseFrom;
 use crate::cli::{Format, Template};
-use crate::alias::AliasValue;
 
 static TEMPLATE_CMAKE_STR: &str = "{\"build\":\"cmake --build ./build\",\"test\":\"ctest -V --test-dir=./build/tests\",\"configure\":{\"release\":[\"mkdir -p build\",\"cmake -DCMAKE_BUILD_TYPE=Release -B ./build .\"],\"debug\":[\"mkdir -p build\",\"cmake -DCMAKE_BUILD_TYPE=Debug -B ./build .\"]},\"push\":[\"git add .\",\"git commit\",\"git push\"]}";
 
@@ -21,10 +21,18 @@ static TEMPLATE_NODE_STR: &str = "{\"run\":\"npm start\",\"build\":\"npm run bui
 
 static TEMPLATE_PYTHON_STR: &str = "{\"push\":[\"git add .\",\"git commit\",\"git push\"],\"run(1)\":\"python $1.py\"}";
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(untagged)]
+pub enum ConfigValue {
+	Command(String),
+    List(Vec<String>),
+    Map(HashMap<String, ConfigValue>),
+}
+
 pub struct Config {
     pub path: Box<PathBuf>,
     pub entry: Box<PathBuf>,
-    pub data: HashMap<String, AliasValue>,
+    pub data: HashMap<String, ConfigValue>,
 }
 
 impl TryParseFrom<&PathBuf> for Config {
@@ -81,23 +89,23 @@ impl Config {
 
 	pub fn new(path: &PathBuf, format: &Format, template: Template) -> Result<Config, serde_any::Error> {
     	lazy_static! {
-        	static ref TEMPLATE_BARE: HashMap<String, AliasValue> = HashMap::new();
-            static ref TEMPLATE_CMAKE: HashMap<String, AliasValue> = 
+        	static ref TEMPLATE_BARE: HashMap<String, ConfigValue> = HashMap::new();
+            static ref TEMPLATE_CMAKE: HashMap<String, ConfigValue> = 
                 serde_any::from_str(TEMPLATE_CMAKE_STR, serde_any::Format::Json).unwrap();
-            static ref TEMPLATE_CARGO: HashMap<String, AliasValue> = 
+            static ref TEMPLATE_CARGO: HashMap<String, ConfigValue> = 
                 serde_any::from_str(TEMPLATE_CARGO_STR, serde_any::Format::Json).unwrap();
-            static ref TEMPLATE_GO: HashMap<String, AliasValue> = 
+            static ref TEMPLATE_GO: HashMap<String, ConfigValue> = 
                 serde_any::from_str(TEMPLATE_GO_STR, serde_any::Format::Json).unwrap();
-            static ref TEMPLATE_MAKE: HashMap<String, AliasValue> = 
+            static ref TEMPLATE_MAKE: HashMap<String, ConfigValue> = 
                 serde_any::from_str(TEMPLATE_MAKE_STR, serde_any::Format::Json).unwrap();
-            static ref TEMPLATE_NODE: HashMap<String, AliasValue> =
+            static ref TEMPLATE_NODE: HashMap<String, ConfigValue> =
                 serde_any::from_str(TEMPLATE_NODE_STR, serde_any::Format::Json).unwrap();
-            static ref TEMPLATE_PYTHON: HashMap<String, AliasValue> =
+            static ref TEMPLATE_PYTHON: HashMap<String, ConfigValue> =
                 serde_any::from_str(TEMPLATE_PYTHON_STR, serde_any::Format::Json).unwrap();
         }
 
         let entry = new_filepath(&path, &format);
-        let data: HashMap<String, AliasValue> = match template {
+        let data: HashMap<String, ConfigValue> = match template {
         	Template::Bare => TEMPLATE_BARE.clone(),
         	Template::Cmake => TEMPLATE_CMAKE.clone(),
         	Template::Cargo => TEMPLATE_CARGO.clone(),

@@ -50,7 +50,6 @@ impl TryParseFrom<&str> for Invoc {
     	}
 		
     	let mut invoc: Option<Invoc> = None;
-		
 		if let Some(captures) = DECL_RE.captures(value) {
     	    invoc = Some(Invoc {
     	        alias_key: String::from(captures.get(1)
@@ -143,7 +142,6 @@ impl TryParseFrom<&PathBuf> for Invocs {
         invoc_file.read_to_string(&mut invoc_str).unwrap();
 
         for stmt in DELIM_RE.split(invoc_str.as_str()).skip(1) {
-            println!("{}", stmt);
         	if stmt != "" {
             	let invoc = Invoc::try_parse_from(stmt)?;
                 invoc_list.push(invoc);

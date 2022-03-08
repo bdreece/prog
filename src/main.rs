@@ -1,4 +1,5 @@
 use std::io::Result;
+use std::process::{Command, Stdio};
 use std::path::PathBuf;
 
 use clap::Parser;
@@ -56,10 +57,19 @@ fn main() -> Result<()> {
     for invoc in &invocs {
     	commands.extend(Commands::try_parse_from((&mut invoc.clone(), &mut aliases.clone())).unwrap());
     }
-
-    println!("Aliases: {:#?}", aliases);
-    println!("Invocations: {:#?}", invocs);
+	/*
+	println!("Aliases: {:#?}", aliases);
+    println!("Invocs: {:#?}", invocs);
     println!("Commands: {:#?}", commands);
+	*/
+	for command in commands {
+    	let mut argv = command.split(" ");
+        Command::new(argv.next().unwrap())
+        	  			   .args(argv)
+                           .stdout(Stdio::inherit())
+                           .output()
+                           .expect("Failed to execute command");
+    }
 
     Ok(())
 }

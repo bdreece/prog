@@ -55,10 +55,10 @@ impl TryParseFrom<(&mut Invoc, &mut Aliases)> for Commands {
                     AliasValue::List(list) => Ok(list.iter()
                         						 	 .enumerate()
                                                   	 .filter_map(|elem| {
-                                                         match indices.contains(&elem.0) {
-															true => Some(elem.1.clone()),
-                                                            false => None,
+                                                         if indices.contains(&elem.0.into()) {
+															return Some(elem.1.clone());
                                                          }
+                                                         None
                                                      }).collect()),
                 	_ => return Err (
                         String::from("Only list aliases be indexed")

@@ -73,7 +73,6 @@ pub struct Args {
     pub script: Option<PathBuf>,
 
     #[clap(
-        last = true,
         help = "Formatted string specifying alias targets"
     )]
     pub input: Option<String>,
